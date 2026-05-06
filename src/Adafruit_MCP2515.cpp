@@ -72,7 +72,7 @@ Adafruit_MCP2515::Adafruit_MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin,
 
 Adafruit_MCP2515::~Adafruit_MCP2515() {}
 
-int Adafruit_MCP2515::begin(long baudRate)
+int Adafruit_MCP2515::begin(long baudRate, bool loopback)
 {
   CANControllerClass::begin(baudRate);
 
@@ -148,17 +148,12 @@ int Adafruit_MCP2515::begin(long baudRate)
   writeRegister(REG_RXBnCTRL(0), FLAG_RXM1 | FLAG_RXM0);
   writeRegister(REG_RXBnCTRL(1), FLAG_RXM1 | FLAG_RXM0);
 
-  writeRegister(REG_CANCTRL, 0x40);
-  if (readRegister(REG_CANCTRL) != 0x40)
+  int regCanctrl = loopback ? 0x40 : 0x00;
+  writeRegister(REG_CANCTRL, regCanctrl);
+  if (readRegister(REG_CANCTRL) != regCanctrl)
   {
     return 0;
   }
-
-  /*writeRegister(REG_CANCTRL, 0x00);
-  if (readRegister(REG_CANCTRL) != 0x00)
-  {
-    return 0;
-  }*/
 
   instance = this;
 

@@ -12,14 +12,15 @@
 
 #define MCP2515_DEFAULT_CLOCK_FREQUENCY 16e6
 
-class Adafruit_MCP2515 : public CANControllerClass {
+class Adafruit_MCP2515 : public CANControllerClass
+{
 
 public:
   Adafruit_MCP2515(int8_t cspin, SPIClass *theSPI = &SPI);
   Adafruit_MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin);
   virtual ~Adafruit_MCP2515();
 
-  virtual int begin(long baudRate);
+  virtual int begin(long baudRate, bool loopback = false);
   virtual void end();
 
   virtual int endPacket();
@@ -27,6 +28,9 @@ public:
   virtual int parsePacket();
 
   virtual void onReceive(int intPin, void (*callback)(int));
+  virtual void onReceive(int intPin, std::function<void(int)>);
+
+  void setupAfterOnReceive(int intPin, bool callback);
 
   using CANControllerClass::filter;
   virtual int filter(int id, int mask);
