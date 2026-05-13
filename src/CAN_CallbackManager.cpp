@@ -6,10 +6,6 @@
 
 CAN_CallbackManager::CAN_CallbackManager() : mMCP(MCP2515_CS, MCP2515_MOSI, MCP2515_MISO, MCP2515_SCK)
 {
-    if (TESTING_CAN_BUS)
-    {
-        mCAN_Test.setup(&mMCP);
-    }
 }
 
 void CAN_CallbackManager::setup()
@@ -108,4 +104,14 @@ void CAN_CallbackManager::handleMessage(int packetSize)
     {
         mCurrentMessages[field.mFieldName] = field.mValue;
     }
+}
+
+void CAN_CallbackManager::setContacts(std::unordered_map<long, MessageBook> aContacts)
+{
+    mPhoneBook.setContacts(aContacts);
+}
+
+MCP2515 *CAN_CallbackManager::getMCP2515()
+{
+    return &mMCP;
 }

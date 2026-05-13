@@ -4,21 +4,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full
 // license information.
 
-#ifndef __ADAFRUIT_MCP2515_H__
-#define __ADAFRUIT_MCP2515_H__
+#ifndef __MCP2515_H__
+#define __MCP2515_H__
 
 #include <Adafruit_SPIDevice.h>
 #include <CANController.h>
 
 #define MCP2515_DEFAULT_CLOCK_FREQUENCY 16e6
 
-class Adafruit_MCP2515 : public CANControllerClass
+class MCP2515 : public CANControllerClass
 {
 
 public:
-  Adafruit_MCP2515(int8_t cspin, SPIClass *theSPI = &SPI);
-  Adafruit_MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin);
-  virtual ~Adafruit_MCP2515();
+  MCP2515(int8_t cspin, SPIClass *theSPI = &SPI);
+  MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin, int8_t sckpin);
+  virtual ~MCP2515();
 
   virtual int begin(long baudRate, bool loopback = false);
   virtual void end();
@@ -55,7 +55,7 @@ private:
   void modifyRegister(uint8_t address, uint8_t mask, uint8_t value);
   void writeRegister(uint8_t address, uint8_t value);
 
-  static Adafruit_MCP2515 *instance;
+  static MCP2515 *instance;
   static void onInterrupt();
 
   Adafruit_SPIDevice *spi_dev = NULL; ///< Pointer to SPI bus interface

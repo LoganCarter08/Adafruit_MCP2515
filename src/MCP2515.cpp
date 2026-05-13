@@ -4,7 +4,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full
 // license information.
 
-#include "Adafruit_MCP2515.h"
+#include "MCP2515.h"
 
 #define REG_BFPCTRL 0x0c
 #define REG_TXRTSCTRL 0x0d
@@ -56,23 +56,23 @@
 #define FLAG_RXM0 0x20
 #define FLAG_RXM1 0x40
 
-Adafruit_MCP2515::Adafruit_MCP2515(int8_t cspin, SPIClass *theSPI)
+MCP2515::MCP2515(int8_t cspin, SPIClass *theSPI)
     : CANControllerClass(), _clockFrequency(MCP2515_DEFAULT_CLOCK_FREQUENCY)
 {
   spi_dev = new Adafruit_SPIDevice(cspin, 10e6, SPI_BITORDER_MSBFIRST,
                                    SPI_MODE0, theSPI);
 }
 
-Adafruit_MCP2515::Adafruit_MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin,
-                                   int8_t sckpin)
+MCP2515::MCP2515(int8_t cspin, int8_t mosipin, int8_t misopin,
+                 int8_t sckpin)
     : CANControllerClass(), _clockFrequency(MCP2515_DEFAULT_CLOCK_FREQUENCY)
 {
   spi_dev = new Adafruit_SPIDevice(cspin, sckpin, misopin, mosipin, 10e6);
 }
 
-Adafruit_MCP2515::~Adafruit_MCP2515() {}
+MCP2515::~MCP2515() {}
 
-int Adafruit_MCP2515::begin(long baudRate, bool loopback)
+int MCP2515::begin(long baudRate, bool loopback)
 {
   CANControllerClass::begin(baudRate);
 
@@ -160,9 +160,9 @@ int Adafruit_MCP2515::begin(long baudRate, bool loopback)
   return 1;
 }
 
-void Adafruit_MCP2515::end() { CANControllerClass::end(); }
+void MCP2515::end() { CANControllerClass::end(); }
 
-int Adafruit_MCP2515::endPacket()
+int MCP2515::endPacket()
 {
   if (!CANControllerClass::endPacket())
   {
@@ -229,7 +229,7 @@ int Adafruit_MCP2515::endPacket()
   return (readRegister(REG_TXBnCTRL(n)) & 0x70) ? 0 : 1;
 }
 
-int Adafruit_MCP2515::parsePacket()
+int MCP2515::parsePacket()
 {
   int n;
 
@@ -293,7 +293,7 @@ int Adafruit_MCP2515::parsePacket()
   return _rxDlc;
 }
 
-void Adafruit_MCP2515::onReceive(int intPin, void (*callback)(int))
+void MCP2515::onReceive(int intPin, void (*callback)(int))
 {
   CANControllerClass::onReceive(callback);
 
@@ -301,7 +301,7 @@ void Adafruit_MCP2515::onReceive(int intPin, void (*callback)(int))
   setupAfterOnReceive(intPin, callback != nullptr);
 }
 
-void Adafruit_MCP2515::onReceive(int intPin, std::function<void(int)> callback)
+void MCP2515::onReceive(int intPin, std::function<void(int)> callback)
 {
   CANControllerClass::onReceive(callback);
 
@@ -309,7 +309,7 @@ void Adafruit_MCP2515::onReceive(int intPin, std::function<void(int)> callback)
   setupAfterOnReceive(intPin, callback != nullptr);
 }
 
-void Adafruit_MCP2515::setupAfterOnReceive(int intPin, bool callback)
+void MCP2515::setupAfterOnReceive(int intPin, bool callback)
 {
   if (callback)
   {
@@ -317,7 +317,7 @@ void Adafruit_MCP2515::setupAfterOnReceive(int intPin, bool callback)
     SPI.usingInterrupt(digitalPinToInterrupt(intPin));
 #endif
     attachInterrupt(digitalPinToInterrupt(intPin),
-                    Adafruit_MCP2515::onInterrupt, LOW);
+                    MCP2515::onInterrupt, LOW);
   }
   else
   {
@@ -328,7 +328,7 @@ void Adafruit_MCP2515::setupAfterOnReceive(int intPin, bool callback)
   }
 }
 
-int Adafruit_MCP2515::filter(int id, int mask)
+int MCP2515::filter(int id, int mask)
 {
   id &= 0x7ff;
   mask &= 0x7ff;
@@ -370,7 +370,7 @@ int Adafruit_MCP2515::filter(int id, int mask)
   return 1;
 }
 
-int Adafruit_MCP2515::filterExtended(long id, long mask)
+int MCP2515::filterExtended(long id, long mask)
 {
   id &= 0x1FFFFFFF;
   mask &= 0x1FFFFFFF;
@@ -414,7 +414,7 @@ int Adafruit_MCP2515::filterExtended(long id, long mask)
   return 1;
 }
 
-int Adafruit_MCP2515::observe()
+int MCP2515::observe()
 {
   writeRegister(REG_CANCTRL, 0x80);
   if (readRegister(REG_CANCTRL) != 0x80)
@@ -425,7 +425,7 @@ int Adafruit_MCP2515::observe()
   return 1;
 }
 
-int Adafruit_MCP2515::loopback()
+int MCP2515::loopback()
 {
   writeRegister(REG_CANCTRL, 0x40);
   if (readRegister(REG_CANCTRL) != 0x40)
@@ -436,7 +436,7 @@ int Adafruit_MCP2515::loopback()
   return 1;
 }
 
-int Adafruit_MCP2515::sleep()
+int MCP2515::sleep()
 {
   writeRegister(REG_CANCTRL, 0x01);
   if (readRegister(REG_CANCTRL) != 0x01)
@@ -447,7 +447,7 @@ int Adafruit_MCP2515::sleep()
   return 1;
 }
 
-int Adafruit_MCP2515::wakeup()
+int MCP2515::wakeup()
 {
   writeRegister(REG_CANCTRL, 0x00);
   if (readRegister(REG_CANCTRL) != 0x00)
@@ -458,12 +458,12 @@ int Adafruit_MCP2515::wakeup()
   return 1;
 }
 
-void Adafruit_MCP2515::setClockFrequency(long clockFrequency)
+void MCP2515::setClockFrequency(long clockFrequency)
 {
   _clockFrequency = clockFrequency;
 }
 
-void Adafruit_MCP2515::dumpRegisters(Stream &out)
+void MCP2515::dumpRegisters(Stream &out)
 {
   for (int i = 0; i < 128; i++)
   {
@@ -484,7 +484,7 @@ void Adafruit_MCP2515::dumpRegisters(Stream &out)
   }
 }
 
-void Adafruit_MCP2515::reset()
+void MCP2515::reset()
 {
   uint8_t buffer[1] = {0xC0};
   spi_dev->write(buffer, 1);
@@ -492,7 +492,7 @@ void Adafruit_MCP2515::reset()
   delayMicroseconds(10);
 }
 
-void Adafruit_MCP2515::handleInterrupt()
+void MCP2515::handleInterrupt()
 {
   if (readRegister(REG_CANINTF) == 0)
   {
@@ -512,26 +512,26 @@ void Adafruit_MCP2515::handleInterrupt()
   }
 }
 
-uint8_t Adafruit_MCP2515::readRegister(uint8_t address)
+uint8_t MCP2515::readRegister(uint8_t address)
 {
   uint8_t buffer[2] = {0x03, address};
   spi_dev->write_then_read(buffer, 2, buffer, 1);
   return buffer[0];
 }
 
-void Adafruit_MCP2515::modifyRegister(uint8_t address, uint8_t mask,
-                                      uint8_t value)
+void MCP2515::modifyRegister(uint8_t address, uint8_t mask,
+                             uint8_t value)
 {
   uint8_t buffer[4] = {0x05, address, mask, value};
   spi_dev->write(buffer, 4);
 }
 
-void Adafruit_MCP2515::writeRegister(uint8_t address, uint8_t value)
+void MCP2515::writeRegister(uint8_t address, uint8_t value)
 {
   uint8_t buffer[3] = {0x02, address, value};
   spi_dev->write(buffer, 3);
 }
 
-void Adafruit_MCP2515::onInterrupt() { instance->handleInterrupt(); }
+void MCP2515::onInterrupt() { instance->handleInterrupt(); }
 
-Adafruit_MCP2515 *Adafruit_MCP2515::instance;
+MCP2515 *MCP2515::instance;

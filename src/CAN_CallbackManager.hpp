@@ -9,9 +9,8 @@
 #include <memory>
 #include "Arduino.h"
 #include "AnyUnit.hpp"
-#include <Adafruit_MCP2515.h>
+#include <MCP2515.h>
 #include "CAN_Config.hpp"
-#include "CAN_Test.hpp"
 #include "PhoneBook.hpp"
 #include "Message.hpp"
 
@@ -46,26 +45,15 @@ public:
     void handleMessage(int packetSize);
     void setup();
     void loop();
-    void setContacts(std::unordered_map<long, MessageBook> aContacts)
-    {
-        mPhoneBook.setContacts(aContacts);
-    }
-#ifdef TESTING_CAN_BUS
-    void sendTests()
-    {
-        mCAN_Test.sendTests();
-    }
-#endif
+    void setContacts(std::unordered_map<long, MessageBook> aContacts);
+    MCP2515 *getMCP2515();
 
 private:
     std::unordered_map<can_field::CAN_Fields, std::vector<std::shared_ptr<CallbackStatus>>> mSubscriptions;
-    Adafruit_MCP2515 mMCP;
+    MCP2515 mMCP;
     PhoneBook mPhoneBook;
     // this should be a map because we only want to show the current most field. Old should be stale.
     std::unordered_map<can_field::CAN_Fields, AnyUnit> mCurrentMessages{};
-#ifdef TESTING_CAN_BUS
-    CAN_Test mCAN_Test;
-#endif
 };
 
 #endif
