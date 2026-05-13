@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 #include <string>
-#include "Config.hpp"
+#include "CAN_Config.hpp"
 #include <format>
 
 #ifndef DEFAULT_SPEED_UNIT
