@@ -31,12 +31,13 @@ public:
         return {};
     }
 
+    void setContacts(std::unordered_map<long, MessageBook> aContacts)
+    {
+        mContacts = aContacts;
+    }
+
 private:
-#ifndef PHONE_BOOK
     std::unordered_map<long, MessageBook> mContacts = {};
-#else
-    std::unordered_map<long, MessageBook> mContacts = PHONEBOOK;
-#endif
 };
 
 #endif

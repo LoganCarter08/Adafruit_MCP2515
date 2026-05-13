@@ -46,6 +46,10 @@ public:
     void handleMessage(int packetSize);
     void setup();
     void loop();
+    void setContacts(std::unordered_map<long, MessageBook> aContacts)
+    {
+        mPhoneBook.setContacts(aContacts);
+    }
 #ifdef TESTING_CAN_BUS
     void sendTests()
     {
