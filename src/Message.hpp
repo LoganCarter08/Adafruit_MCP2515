@@ -10,7 +10,6 @@
 
 namespace message
 {
-
     enum ENDIANNESS
     {
         BIG,

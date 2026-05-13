@@ -9,8 +9,6 @@
 #include <unordered_set>
 #include "Message.hpp"
 #include "MessageBook.hpp"
-// include your defined messages here
-#include "messages/ECU/DefaultMessages.hpp"
 
 class PhoneBook
 {
@@ -33,8 +31,7 @@ public:
     }
 
 private:
-    const std::unordered_map<long, MessageBook> mContacts = {
-        {1, MessageBook(DEFAULT_MESSAGES, DEFAULT_MESSAGE_ID_LOCATION)}};
+    std::unordered_map<long, MessageBook> mContacts = {};
 };
 
 #endif
