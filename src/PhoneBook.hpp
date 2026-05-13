@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include "Message.hpp"
 #include "MessageBook.hpp"
+#include "CAN_Config.hpp"
 
 class PhoneBook
 {
@@ -31,7 +32,7 @@ public:
     }
 
 private:
-    std::unordered_map<long, MessageBook> mContacts = {};
+    std::unordered_map<long, MessageBook> mContacts = PHONEBOOK;
 };
 
 #endif
