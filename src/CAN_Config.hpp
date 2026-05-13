@@ -17,12 +17,4 @@
 
 #define TESTING_CAN_BUS true
 
-#ifndef PHONE_BOOK
-#define PHONE_BOOK
-#include <unordered_map>
-#include "MessageBook.hpp"
-
-static std::unordered_map<long, MessageBook> PHONEBOOK = {};
-#endif
-
 #endif
