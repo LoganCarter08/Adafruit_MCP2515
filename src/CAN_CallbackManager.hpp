@@ -10,7 +10,7 @@
 #include "Arduino.h"
 #include "AnyUnit.hpp"
 #include <Adafruit_MCP2515.h>
-#include "Config.hpp"
+#include "CAN_Config.hpp"
 #include "CAN_Test.hpp"
 #include "PhoneBook.hpp"
 #include "Message.hpp"
