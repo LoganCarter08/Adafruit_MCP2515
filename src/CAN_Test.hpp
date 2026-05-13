@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 #include <Adafruit_MCP2515.h>
-#include <Config.hpp>
+#include <CAN_Config.hpp>
 #include <tuple>
 
 class CAN_Test
